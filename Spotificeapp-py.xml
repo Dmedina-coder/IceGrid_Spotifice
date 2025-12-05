@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- This file was written by IceGrid Admin -->
+<icegrid>
+   <application name="Spotifice">
+      <node name="node-Spotifice">
+         <server id="media-server1" activation="manual" exe="./media_server.py" pwd="${application.distrib}">
+            <properties>
+               <property name="Ice.StdOut" value="${application.distrib}/media-server-out.txt"/>
+               <property name="Ice.StdErr" value="${application.distrib}/media-server-err.txt"/>
+               <property name="MediaServer.Content" value="${application.distrib}/media"/>
+               <property name="MediaServer.Playlists" value="${application.distrib}/playlists"/>
+            </properties>
+            <adapter name="MediaServerAdapter" endpoints="default" id="${server}.MediaServerAdapter">
+               <object identity="mediaServer1" type="::Spotifice::MediaServer"/>
+            </adapter>
+         </server>
+
+         <server id="media-render1" activation="manual" exe="./media_render.py" pwd="${application.distrib}">
+            <properties>
+               <property name="Ice.StdOut" value="${application.distrib}/media-render-out.txt"/>
+               <property name="Ice.StdErr" value="${application.distrib}/media-render-err.txt"/>
+               <property name="MediaServer.Proxy" value="mediaServer1@MediaServerAdapter"/>
+               <property name="MediaRender.Proxy" value="mediaRender1@MediaRenderAdapter"/>
+            </properties>
+            <adapter name="MediaRenderAdapter" endpoints="default" id="${server}.MediaRenderAdapter">
+               <object identity="mediaRender1" type="::Spotifice::MediaRender"/>
+            </adapter>
+         </server>
+      </node>
+   </application>
+</icegrid>
