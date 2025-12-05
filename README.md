@@ -40,75 +40,100 @@ That executes `media_server`, `media_render` and `media_control` with the proper
 Developed by the *Distributed Systems* course teachers at **UCLM-ESI**.
 
 ## Ejecución
-1º
 
-$ make start-grid
+### 1. Iniciar IceGrid
 
-2º
+```bash
+make start-grid
+```
 
-$ icegridgui
+### 2. Abrir la interfaz gráfica de IceGrid
 
-3º
+```bash
+icegridgui
+```
 
-icegrid -->
-    "Log int an IceGrid Registry"
-    "New Connection"
-    "Direct Connection"
-    "Connect to a Master Registry"
-    Aceptar Endpoint descubierto
-    Credenciales "user@pass"
+### 3. Conectar con el Registry
 
-4º
+En la interfaz de IceGrid:
 
-icegrid -->
-    "File">
-    "New">
-    "Application with Default Template from Registry"
+1. Seleccionar **"Log into an IceGrid Registry"**
+2. Elegir **"New Connection"**
+3. Seleccionar **"Direct Connection"**
+4. Elegir **"Connect to a Master Registry"**
+5. Aceptar el endpoint descubierto
+6. Introducir credenciales: `user@pass`
 
-5º
+### 4. Crear una nueva aplicación
 
-icegrid>New App
-    "Spotifice">IcePatch2 Proxy>"${application}.IcePatch2/server"
-    "Nodes">btn_der>"New Node">Name>"node-Sopotifice"
-    "node-Spotifice">btn_der"New Server from Template">
-        Template>"IcePatch2"
-        directory>{directorio del proyecto}
-    "node-Spotifice">btn_der>"New Server"
-        Server ID>"media-server1"
-        Path to Executable>"./media_server.py"
-        Working Directory>"${application.distrib}
-    "node-Spotifice">btn_der>"New Server"
-        Server ID>"media-render1"
-        Path to Executable>"./media_render.py"
-        Working Directory>"${application.distrib}
+En el menú de IceGrid:
 
-6º    
+**File → New → Application with Default Template from Registry**
 
-icegrid>Spotifice>Nodes>node_Spotifice>media-server1
-    btn_der>"New Adapter"
-        AdapterName>"MediaServerAdapter"
-icegrid>Spotifice>Nodes>node_Spotifice>media-render1
-    btn_der>"New Adapter"
-        AdapterName>"MediaRenderAdapter"
+### 5. Configurar la aplicación
 
-7º
+#### Configuración básica:
+- **Nombre de aplicación:** `Spotifice`
+- **IcePatch2 Proxy:** `${application}.IcePatch2/server`
 
-icegrid>Save to registry (server may restart)
+#### Crear nodo:
+1. Click derecho en **"Nodes"** → **"New Node"**
+2. **Name:** `node-Spotifice`
 
-8º
+#### Añadir servidor IcePatch2:
+1. Click derecho en `node-Spotifice` → **"New Server from Template"**
+   - **Template:** `IcePatch2`
+   - **Directory:** `{directorio del proyecto}`
 
-En el directorio del proyecto
-    $ icepatch2calc ./
+#### Añadir servidor de medios:
+1. Click derecho en `node-Spotifice` → **"New Server"**
+   - **Server ID:** `media-server1`
+   - **Path to Executable:** `./media_server.py`
+   - **Working Directory:** `${application.distrib}`
 
-9º
+#### Añadir servidor de renderizado:
+1. Click derecho en `node-Spotifice` → **"New Server"**
+   - **Server ID:** `media-render1`
+   - **Path to Executable:** `./media_render.py`
+   - **Working Directory:** `${application.distrib}`
 
-icegrid>Live Deployment
-    Tools>Application>Patch Distribution
-    node_Spotifice>btn_der>Start All Servers
+### 6. Configurar adaptadores
 
-10º
+#### Para media-server1:
+Navegar a: **Spotifice → Nodes → node_Spotifice → media-server1**
+- Click derecho → **"New Adapter"**
+- **Adapter Name:** `MediaServerAdapter`
 
-En el directorio del proyecto
-    $ python3 media_control_v1.py --Ice.Config=locator.config
+#### Para media-render1:
+Navegar a: **Spotifice → Nodes → node_Spotifice → media-render1**
+- Click derecho → **"New Adapter"**
+- **Adapter Name:** `MediaRenderAdapter`
+
+### 7. Guardar en el registry
+
+En IceGrid: **Save to registry** (los servidores pueden reiniciarse)
+
+### 8. Calcular parches
+
+En el directorio del proyecto:
+
+```bash
+icepatch2calc ./
+```
+
+### 9. Iniciar los servidores
+
+En la vista de **Live Deployment**:
+
+1. **Tools → Application → Patch Distribution**
+2. Click derecho en `node_Spotifice` → **"Start All Servers"**
+
+### 10. Ejecutar el control de medios
+
+En el directorio del proyecto:
+
+```bash
+python3 media_control_v1.py --Ice.Config=locator.config
+```
 
 
