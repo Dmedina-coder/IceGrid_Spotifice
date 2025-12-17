@@ -1,7 +1,7 @@
 services:
   registry:
     build: docker/igregistry
-    image: igregistry
+    image: zeroc/icegridregistry:3.7
     container_name: registry
     hostname: registry
     ports:
@@ -20,7 +20,7 @@ services:
 
   node-server:
     build: docker/ignode
-    image: ignode
+    image: zeroc/icegridnode:3.7
     container_name: node-server
     hostname: node-server
     depends_on:
@@ -39,7 +39,7 @@ services:
 
   node-render:
     build: docker/ignode
-    image: ignode
+    image: zeroc/icegridnode:3.7
     container_name: node-render
     hostname: node-render
     depends_on:

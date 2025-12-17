@@ -12,8 +12,8 @@ down:
 	docker-compose down
 
 build_nodes:
-	docker compose build --no-cache node-server
-	docker compose build --no-cache node-render
+	docker-compose build --no-cache node-server
+	docker-compose build --no-cache node-render
 
 logs:
 	docker-compose logs -f
