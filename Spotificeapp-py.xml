@@ -1,29 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This file was written by IceGrid Admin -->
+<!-- This file was written by IceGrid GUI -->
 <icegrid>
    <application name="Spotifice">
-      <node name="node-Spotifice">
-         <server id="media-server1" activation="manual" exe="./media_server.py" pwd="${application.distrib}">
+      <distrib icepatch="${application}.IcePatch2/server"/>
+      <server-template id="IcePatch2">
+         <parameter name="instance-name" default="${application}.IcePatch2"/>
+         <parameter name="endpoints" default="default"/>
+         <parameter name="directory"/>
+         <server id="${instance-name}" activation="on-demand" application-distrib="false" exe="icepatch2server">
             <properties>
-               <property name="Ice.StdOut" value="${application.distrib}/media-server-out.txt"/>
-               <property name="Ice.StdErr" value="${application.distrib}/media-server-err.txt"/>
-               <property name="MediaServer.Content" value="${application.distrib}/media"/>
-               <property name="MediaServer.Playlists" value="${application.distrib}/playlists"/>
+               <property name="IcePatch2.InstanceName" value="${instance-name}"/>
+               <property name="IcePatch2.Directory" value="${directory}"/>
             </properties>
-            <adapter name="MediaServerAdapter" endpoints="default" id="${server}.MediaServerAdapter">
-               <object identity="mediaServer1" type="::Spotifice::MediaServer"/>
+            <adapter name="IcePatch2" endpoints="${endpoints}" id="${server}.IcePatch2">
+               <object identity="${instance-name}/server" type="::IcePatch2::FileServer"/>
             </adapter>
          </server>
-
+      </server-template>
+      <node name="node-render">
          <server id="media-render1" activation="manual" exe="./media_render.py" pwd="${application.distrib}">
             <properties>
-               <property name="Ice.StdOut" value="${application.distrib}/media-render-out.txt"/>
-               <property name="Ice.StdErr" value="${application.distrib}/media-render-err.txt"/>
                <property name="MediaServer.Proxy" value="mediaServer1@MediaServerAdapter"/>
-               <property name="MediaRender.Proxy" value="mediaRender1@MediaRenderAdapter"/>
+               <property name="Ice.StdOut" value="${application.distrib}/media-render1.out"/>
+               <property name="Ice.StdErr" value="${application.distrib}/media-render1.err"/>
             </properties>
+            <distrib icepatch="${application}.IcePatch2/server"/>
             <adapter name="MediaRenderAdapter" endpoints="default" id="${server}.MediaRenderAdapter">
                <object identity="mediaRender1" type="::Spotifice::MediaRender"/>
+            </adapter>
+         </server>
+      </node>
+      <node name="node-server">
+         <server-instance template="IcePatch2" directory="/home/chadry/3curso/ssdd/lab/IceGrid_Spotifice"/>
+         <server id="media-server1" activation="manual" exe="./media_server.py" pwd="${application.distrib}">
+            <properties>
+               <property name="MediaServer.Content" value="${application.distrib}/media"/>
+               <property name="MediaServer.Playlists" value="${application.distrib}/playlists"/>
+               <property name="Ice.StdOut" value="${application.distrib}/media-server1.out"/>
+               <property name="Ice.StdErr" value="${application.distrib}/media-server1.err"/>
+            </properties>
+            <distrib icepatch="${application}.IcePatch2/server"/>
+            <adapter name="MediaServerAdapter" endpoints="default" id="${server}.MediaServerAdapter">
+               <object identity="mediaServer1" type="::Spotifice::MediaServer"/>
             </adapter>
          </server>
       </node>
