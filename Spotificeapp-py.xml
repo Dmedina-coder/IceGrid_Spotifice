@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- This file was written by IceGrid Admin -->
+<!-- This file was written by IceGrid GUI -->
 <icegrid>
    <application name="Spotifice">
-      <node name="node-Spotifice">
-         <server id="media-server1" activation="manual" exe="./media_server.py" pwd="${application.distrib}">
+      <node name="node-server">
+         <server id="media-server1" activation="on-demand" exe="python3" pwd="/app">
+            <option>media_server.py</option>
             <properties>
-               <property name="Ice.StdOut" value="${application.distrib}/media-server-out.txt"/>
-               <property name="Ice.StdErr" value="${application.distrib}/media-server-err.txt"/>
-               <property name="MediaServer.Content" value="${application.distrib}/media"/>
-               <property name="MediaServer.Playlists" value="${application.distrib}/playlists"/>
+               <property name="MediaServer.Content" value="/app/media"/>
+               <property name="MediaServer.Playlists" value="/app/playlists"/>
+               <property name="Ice.StdOut" value="/app/media-server1.out"/>
+               <property name="Ice.StdErr" value="/app/media-server1.err"/>
             </properties>
-            <adapter name="MediaServerAdapter" endpoints="default" id="${server}.MediaServerAdapter">
+            <adapter name="MediaServerAdapter" endpoints="tcp" id="${server}.MediaServerAdapter">
                <object identity="mediaServer1" type="::Spotifice::MediaServer"/>
             </adapter>
          </server>
-
-         <server id="media-render1" activation="manual" exe="./media_render.py" pwd="${application.distrib}">
+      </node>
+      <node name="node-render">
+         <server id="media-render1" activation="on-demand" exe="python3" pwd="/app">
+            <option>media_render.py</option>
             <properties>
-               <property name="Ice.StdOut" value="${application.distrib}/media-render-out.txt"/>
-               <property name="Ice.StdErr" value="${application.distrib}/media-render-err.txt"/>
                <property name="MediaServer.Proxy" value="mediaServer1@MediaServerAdapter"/>
-               <property name="MediaRender.Proxy" value="mediaRender1@MediaRenderAdapter"/>
+               <property name="Ice.StdOut" value="/app/media-render1.out"/>
+               <property name="Ice.StdErr" value="/app/media-render1.err"/>
             </properties>
-            <adapter name="MediaRenderAdapter" endpoints="default" id="${server}.MediaRenderAdapter">
+            <adapter name="MediaRenderAdapter" endpoints="tcp" id="${server}.MediaRenderAdapter">
                <object identity="mediaRender1" type="::Spotifice::MediaRender"/>
             </adapter>
          </server>

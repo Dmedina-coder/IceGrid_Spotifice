@@ -1,0 +1,65 @@
+services:
+  registry:
+    build: docker/igregistry
+    image: igregistry
+    container_name: registry
+    hostname: registry
+    ports:
+      - "4061:4061"
+    networks:
+      icegrid:
+        ipv4_address: 172.27.0.10
+    volumes:
+      - "./registry.config:/etc/icegridregistry.conf:ro"
+      - "./Spotificeapp-py.xml:/app/Spotificeapp-py.xml:ro"
+    healthcheck:
+      test: "bash -c ':> /dev/tcp/172.27.0.1/4061'"
+      interval: 1s
+      retries: 5
+      timeout: 2s
+
+  node-server:
+    build: docker/ignode
+    image: ignode
+    container_name: node-server
+    hostname: node-server
+    depends_on:
+      registry:
+        condition: service_healthy
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 1024
+    networks:
+      - icegrid
+    volumes:
+      - "./node-server.config:/etc/icegridnode.conf:ro"
+      - ".:/app:rw"
+    working_dir: /app
+
+  node-render:
+    build: docker/ignode
+    image: ignode
+    container_name: node-render
+    hostname: node-render
+    depends_on:
+      registry:
+        condition: service_healthy
+    ulimits:
+      nofile:
+        soft: 1024
+        hard: 1024
+    networks:
+      - icegrid
+    volumes:
+      - "./node-render.config:/etc/icegridnode.conf:ro"
+      - ".:/app:rw"
+    working_dir: /app
+
+networks:
+  icegrid:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.27.0.0/16
+          gateway: 172.27.0.1
