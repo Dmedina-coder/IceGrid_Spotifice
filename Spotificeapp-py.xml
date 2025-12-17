@@ -31,7 +31,7 @@
          </server>
       </node>
       <node name="node-server">
-         <server-instance template="IcePatch2" directory="/home/chadry/3curso/ssdd/lab/IceGrid_Spotifice"/>
+         <server-instance template="IcePatch2" directory="distrib"/>
          <server id="media-server1" activation="manual" exe="./media_server.py" pwd="${application.distrib}">
             <properties>
                <property name="MediaServer.Content" value="${application.distrib}/media"/>

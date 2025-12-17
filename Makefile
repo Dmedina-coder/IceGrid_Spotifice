@@ -11,6 +11,36 @@ endef
 /tmp/icedata/%:
 	mkdir -p $@
 
+media: portal2-ost.zip
+	mkdir -p media
+	unzip -o $< -d media
+
+portal2-ost.zip:
+    wget http://media.steampowered.com/apps/portal2/soundtrack/Portal2-OST-Complete.zip -O $@
+
+borrar-datos: 
+	-find . -type f -name "*.bz2" -delete
+	-find . -type f -name "*.sum" -delete
+	-$(RM) *.sum
+
+.PHONY: clean
+
+clean: stop-grid
+	-$(RM) *~
+	-$(RM) -r /tmp/icedata
+	-killall icegridnode
+
+stop-grid:
+	-killall icegridnode icegridregistry
+	@for node in $(NODES); do \
+		$(call ig_admin, node shutdown $$node); \
+	done
+	@echo -- grid stopped
+
+show-nodes:
+	$(call ig_admin, node list)
+
+## local ####
 start-grid: /tmp/icedata/registry $(NODE_DIRS)
 	cp default-templates.xml /tmp/icedata/
 
@@ -27,31 +57,23 @@ start-grid: /tmp/icedata/registry $(NODE_DIRS)
 
 	@echo -- ok
 
-stop-grid:
-	-killall icegridnode icegridregistry
-	@for node in $(NODES); do \
-		$(call ig_admin, node shutdown $$node); \
-	done
-	@echo -- grid stopped
+## distribuido ##
+start-registry: /tmp/icedata/registry
+	cp default-templates.xml /tmp/icedata/
 
-show-nodes:
-	$(call ig_admin, node list)
+	@echo -- starting IceGrid registry
+	icegridregistry --Ice.Config=$(REGISTRY_CFG) &
 
-media: portal2-ost.zip
-	mkdir -p media
-	unzip -o $< -d media
+	@echo -- waiting registry to start...
+	@while ! ss -ltnH 2>/dev/null | grep -q ':10000'; do sleep 1; done
 
-portal2-ost.zip:
-    wget http://media.steampowered.com/apps/portal2/soundtrack/Portal2-OST-Complete.zip -O $@
+	@echo -- ok
 
-borrar-datos: 
-	-find . -type f -name "*.bz2" -delete
-	-$(RM) *.sum
+start-node-server: $(NODE_DIRS)
+	icegridnode --Ice.Config=node-server.config & \
 
-.PHONY: clean
+start-node-render: $(NODE_DIRS)
+	icegridnode --Ice.Config=node-render.config & \
 
-clean: stop-grid
-	-$(RM) *~
-	-$(RM) -r /tmp/icedata
-	-killall icegridnode
+
 
