@@ -80,7 +80,7 @@ En IceGrid: **Save to registry** (los servidores pueden reiniciarse)
 En el directorio del proyecto:
 
 ```bash
-icepatch2calc ./
+icepatch2calc distrib
 ```
 
 ### 7. Iniciar los servidores
