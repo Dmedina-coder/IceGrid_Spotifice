@@ -8,8 +8,6 @@
             <properties>
                <property name="MediaServer.Content" value="/app/media"/>
                <property name="MediaServer.Playlists" value="/app/playlists"/>
-               <property name="Ice.StdOut" value="/app/media-server1.out"/>
-               <property name="Ice.StdErr" value="/app/media-server1.err"/>
             </properties>
             <adapter name="MediaServerAdapter" endpoints="tcp" id="${server}.MediaServerAdapter">
                <object identity="mediaServer1" type="::Spotifice::MediaServer"/>
@@ -21,8 +19,6 @@
             <option>media_render.py</option>
             <properties>
                <property name="MediaServer.Proxy" value="mediaServer1@MediaServerAdapter"/>
-               <property name="Ice.StdOut" value="/app/media-render1.out"/>
-               <property name="Ice.StdErr" value="/app/media-render1.err"/>
             </properties>
             <adapter name="MediaRenderAdapter" endpoints="tcp" id="${server}.MediaRenderAdapter">
                <object identity="mediaRender1" type="::Spotifice::MediaRender"/>

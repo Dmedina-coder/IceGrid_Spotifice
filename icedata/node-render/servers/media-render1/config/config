@@ -1,0 +1,12 @@
+# Configuration file (12/17/25 23:56:57.878)
+
+# Server configuration
+Ice.Admin.ServerId=media-render1
+Ice.Admin.Endpoints=tcp -h localhost
+Ice.ProgramName=media-render1
+# Object adapter MediaRenderAdapter
+MediaRenderAdapter.Endpoints=tcp
+MediaRenderAdapter.AdapterId=media-render1.MediaRenderAdapter
+# Server descriptor properties
+MediaServer.Proxy=mediaServer1@MediaServerAdapter
+Ice.Default.Locator=IceGrid/Locator -t:tcp -h registry -p 4061

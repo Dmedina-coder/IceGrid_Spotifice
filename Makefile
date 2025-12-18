@@ -6,14 +6,14 @@ endef
 
 up: down
 	reset
-	docker-compose up -d --remove-orphans
+	docker-compose up --build -d --remove-orphans
 
 down:
 	docker-compose down
 
-build_nodes:
-	docker-compose build --no-cache node-server
-	docker-compose build --no-cache node-render
+build_nodes: make-dir
+	docker-compose up --build node-server
+	docker-compose up --build node-render
 
 logs:
 	docker-compose logs -f
@@ -29,6 +29,10 @@ client:
 
 client-wko:
 	python3 ./media_control_v1.py --Ice.Config=locator.config
+
+make-dir:
+	mkdir -p ./icedata/node-server
+	mkdir -p ./icedata/node-render
 
 clean: down
 	-$(RM) *~

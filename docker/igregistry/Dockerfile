@@ -1,4 +1,4 @@
-FROM zeroc/icegridregistry:3.7
+FROM zeroc/icegridregistry:3.7.10
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
