@@ -75,5 +75,6 @@ start-node-server: $(NODE_DIRS)
 start-node-render: $(NODE_DIRS)
 	icegridnode --Ice.Config=node-render.config & \
 
-
+client:
+	python3 ./media_control_client.py --Ice.Config=client.config
 

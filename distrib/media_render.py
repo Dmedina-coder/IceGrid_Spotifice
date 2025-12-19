@@ -228,8 +228,12 @@ def main(ic, player):
     servant = MediaRenderI(player)
 
     adapter = ic.createObjectAdapter("MediaRenderAdapter")
-    proxy = adapter.add(servant, ic.stringToIdentity("mediaRender1"))
-    logger.info(f"MediaRender: {proxy}")
+    # Usar categoría para poder identificar el servicio
+    identity = Ice.Identity()
+    identity.name = "render"
+    identity.category = "mediaRender"
+    proxy = adapter.add(servant, identity)
+    logger.info(f"MediaRender (category/UUID): {proxy}")
 
     adapter.activate()
     ic.waitForShutdown()

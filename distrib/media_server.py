@@ -186,8 +186,12 @@ def main(ic):
     servant = MediaServerI(Path(media_dir), Path(playlists_dir))
 
     adapter = ic.createObjectAdapter("MediaServerAdapter")
-    proxy = adapter.add(servant, ic.stringToIdentity("mediaServer1"))
-    logger.info(f"MediaServer: {proxy}")
+    # Usar categoría para poder identificar el servicio
+    identity = Ice.Identity()
+    identity.name = "server"
+    identity.category = "mediaServer"
+    proxy = adapter.add(servant, identity)
+    logger.info(f"MediaServer (category/UUID): {proxy}")
 
     adapter.activate()
     ic.waitForShutdown()
