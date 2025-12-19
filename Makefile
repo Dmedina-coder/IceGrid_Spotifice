@@ -1,10 +1,10 @@
 #!/usr/bin/make -f
 
 REGISTRY_CFG = registry.config
-NODES = node-server node-render
+NODES = node-server node-render node-server2 node-render2
 NODE_DIRS = $(addprefix /tmp/icedata/, $(NODES) registry)
 
-SERVERS = media-server media-render
+SERVERS = media-server media-render media-server2 media-render2
 
 define ig_admin
     icegridadmin --Ice.Config=locator.config -u user -p pass -e "$(1)"
@@ -48,9 +48,15 @@ deploy-app:
 start-servers:
 	$(call ig_admin, server start $(SERVERS))
 
-start-nodes: start-node-server start-node-render
+start-nodes: start-node-server start-node-render start-node-server2 start-node-render2
+
+start-local-nodes: start-node-server start-node-render
+
+start-remote-nodes: start-node-server2 start-node-render2
 
 start-all: start-registry start-nodes deploy-app start-servers
+
+start-nodes-only: start-nodes deploy-app start-servers
 
 ## local ####
 start-grid: /tmp/icedata/registry $(NODE_DIRS)
@@ -86,6 +92,12 @@ start-node-server: $(NODE_DIRS)
 
 start-node-render: $(NODE_DIRS)
 	icegridnode --Ice.Config=node-render.config & \
+
+start-node-server2: $(NODE_DIRS)
+	icegridnode --Ice.Config=node-server2.config & \
+
+start-node-render2: $(NODE_DIRS)
+	icegridnode --Ice.Config=node-render2.config & \
 
 client:
 	python3 media_control_v1.py --Ice.Config=locator.config

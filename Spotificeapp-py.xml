@@ -52,5 +52,33 @@
             </adapter>
          </server>
       </node>
+      <node name="node-server2">
+         <server id="media-server2" activation="manual" exe="./media_server.py" pwd="${application.distrib}">
+            <properties>
+               <property name="Ice.Admin.Endpoints" value=""/>
+               <property name="MediaServer.Media" value="${application.distrib}/media"/>
+               <property name="MediaServer.Playlists" value="${application.distrib}/playlists"/>
+               <property name="Ice.StdOut" value="${application.distrib}/media-server2.out"/>
+               <property name="Ice.StdErr" value="${application.distrib}/media-server2.err"/>
+            </properties>
+            <distrib icepatch="${application}.IcePatch2/server"/>
+            <adapter name="MediaServerAdapter" endpoints="default" id="${server}.MediaServerAdapter" replica-group="MediaServerReplicaGroup">
+               <object identity="mediaServer/server2" type="::Spotifice::MediaServer"/>
+            </adapter>
+         </server>
+      </node>
+      <node name="node-render2">
+         <server id="media-render2" activation="manual" exe="./media_render.py" pwd="${application.distrib}">
+            <properties>
+               <property name="Ice.Admin.Endpoints" value=""/>
+               <property name="Ice.StdOut" value="${application.distrib}/media-render2.out"/>
+               <property name="Ice.StdErr" value="${application.distrib}/media-render2.err"/>
+            </properties>
+            <distrib icepatch="${application}.IcePatch2/server"/>
+            <adapter name="MediaRenderAdapter" endpoints="default" id="${server}.MediaRenderAdapter" replica-group="MediaRenderReplicaGroup">
+               <object identity="mediaRender/render2" type="::Spotifice::MediaRender"/>
+            </adapter>
+         </server>
+      </node>
    </application>
 </icegrid>
