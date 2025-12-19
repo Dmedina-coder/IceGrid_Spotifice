@@ -4,6 +4,8 @@ REGISTRY_CFG = registry.config
 NODES = node-server node-render
 NODE_DIRS = $(addprefix /tmp/icedata/, $(NODES) registry)
 
+SERVERS = media-server media-render
+
 define ig_admin
     icegridadmin --Ice.Config=locator.config -u user -p pass -e "$(1)"
 endef
@@ -23,7 +25,7 @@ borrar-datos:
 	-find . -type f -name "*.sum" -delete
 	-$(RM) *.sum
 
-.PHONY: clean
+.PHONY: clean deploy-app start-servers start-nodes start-all start-grid start-registry start-node-server start-node-render stop-grid show-nodes client media borrar-datos
 
 clean: stop-grid
 	-$(RM) *~
@@ -39,6 +41,16 @@ stop-grid:
 
 show-nodes:
 	$(call ig_admin, node list)
+
+deploy-app:
+	$(call ig_admin, application update Spotificeapp-py.xml)
+
+start-servers:
+	$(call ig_admin, server start $(SERVERS))
+
+start-nodes: start-node-server start-node-render
+
+start-all: start-registry start-nodes deploy-app start-servers
 
 ## local ####
 start-grid: /tmp/icedata/registry $(NODE_DIRS)
@@ -76,5 +88,5 @@ start-node-render: $(NODE_DIRS)
 	icegridnode --Ice.Config=node-render.config & \
 
 client:
-	python3 ./media_control_client.py --Ice.Config=client.config
+	python3 media_control_v1.py --Ice.Config=locator.config
 
