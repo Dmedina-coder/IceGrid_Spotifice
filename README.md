@@ -41,62 +41,47 @@ Developed by the *Distributed Systems* course teachers at **UCLM-ESI**.
 
 ## Ejecución
 
-### 1. Iniciar IceGrid
+### 1. Iniciar Registry
 
 ```bash
-make start-grid
+make start-registry
 ```
 
-### 2. Abrir la interfaz gráfica de IceGrid
+### 2. Crear nodos locales y remotos
+
+En la maquina local
+
+```bash
+make start-local-nodes
+```
+En la maquina distribuida
+
+```bash
+make start-remote-nodes
+```
+
+### 3. Desplegar la aplicación
+
+```bash
+make deploy-app
+```
+
+### 4. Arrancamos los servidores locales y remotos
+
+```bash
+make start-servers
+```
+
+### 5. Ejecutar el control de medios
+
+En el directorio del proyecto:
+
+```bash
+make client
+```
+
+### 6. La gestion de los nodos la podemos gestionar desde
 
 ```bash
 icegridgui
 ```
-
-### 3. Conectar con el Registry
-
-En la interfaz de IceGrid:
-
-1. Seleccionar **"Log into an IceGrid Registry"**
-2. Elegir **"New Connection"**
-3. Seleccionar **"Direct Connection"**
-4. Elegir **"Connect to a Master Registry"**
-5. Aceptar el endpoint descubierto
-6. Introducir credenciales: `user@pass`
-
-### 4. Importar XML de la aplicación
-
-En el menú de IceGrid:
-
-1. **File → Open → Application from file**
-2. Abrir **Spotificeapp-py.xml**
-
-### 5. Guardar en el registry
-
-En IceGrid: **Save to registry** (los servidores pueden reiniciarse)
-
-### 6. Calcular parches
-
-En el directorio del proyecto:
-
-```bash
-icepatch2calc distrib
-```
-
-### 7. Iniciar los servidores
-
-En la vista de **Live Deployment**:
-
-1. **Tools → Application → Patch Distribution**
-2. Click derecho en `node-server` → **"Start All Servers"**
-3. Click derecho en `node-render` → **"Start All Servers"**
-
-### 8. Ejecutar el control de medios
-
-En el directorio del proyecto:
-
-```bash
-python3 media_control_v1.py --Ice.Config=locator.config
-```
-
-

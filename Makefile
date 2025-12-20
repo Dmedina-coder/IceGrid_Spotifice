@@ -2,7 +2,6 @@
 
 REGISTRY_CFG = registry.config
 NODES = node-server node-render node-server2 node-render2
-NODE_DIRS = $(addprefix /tmp/icedata/, $(NODES) registry)
 
 SERVERS = media-server media-render media-server2 media-render2
 
@@ -43,10 +42,15 @@ show-nodes:
 	$(call ig_admin, node list)
 
 deploy-app:
-	$(call ig_admin, application update Spotificeapp-py.xml)
+	$(call ig_admin,application add ./Spotificeapp-py.xml)
+
+deploy-app-update:
+	$(call ig_admin,application update ./Spotificeapp-py.xml)
 
 start-servers:
-	$(call ig_admin, server start $(SERVERS))
+	@for server in $(SERVERS); do \
+		$(call ig_admin, server start $$server); \
+	done
 
 start-nodes: start-node-server start-node-render start-node-server2 start-node-render2
 
@@ -58,24 +62,6 @@ start-all: start-registry start-nodes deploy-app start-servers
 
 start-nodes-only: start-nodes deploy-app start-servers
 
-## local ####
-start-grid: /tmp/icedata/registry $(NODE_DIRS)
-	cp default-templates.xml /tmp/icedata/
-
-	@echo -- starting IceGrid registry
-	icegridregistry --Ice.Config=$(REGISTRY_CFG) &
-
-	@echo -- waiting registry to start...
-	@while ! ss -ltnH 2>/dev/null | grep -q ':10000'; do sleep 1; done
-
-	@for node in $(NODES); do \
-		echo -- starting $$node; \
-		icegridnode --Ice.Config=$$node.config & \
-	done
-
-	@echo -- ok
-
-## distribuido ##
 start-registry: /tmp/icedata/registry
 	cp default-templates.xml /tmp/icedata/
 
@@ -87,16 +73,16 @@ start-registry: /tmp/icedata/registry
 
 	@echo -- ok
 
-start-node-server: $(NODE_DIRS)
+start-node-server: /tmp/icedata/node-server /tmp/icedata/registry
 	icegridnode --Ice.Config=node-server.config & \
 
-start-node-render: $(NODE_DIRS)
+start-node-render: /tmp/icedata/node-render /tmp/icedata/registry
 	icegridnode --Ice.Config=node-render.config & \
 
-start-node-server2: $(NODE_DIRS)
+start-node-server2: /tmp/icedata/node-server2 /tmp/icedata/registry
 	icegridnode --Ice.Config=node-server2.config & \
 
-start-node-render2: $(NODE_DIRS)
+start-node-render2: /tmp/icedata/node-render2 /tmp/icedata/registry
 	icegridnode --Ice.Config=node-render2.config & \
 
 client:
