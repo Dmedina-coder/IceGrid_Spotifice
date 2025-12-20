@@ -32,10 +32,10 @@ clean: stop-grid
 	-killall icegridnode
 
 stop-grid:
-	-killall icegridnode icegridregistry
 	@for node in $(NODES); do \
 		$(call ig_admin, node shutdown $$node); \
 	done
+	-killall icegridnode icegridregistry
 	@echo -- grid stopped
 
 show-nodes:
@@ -43,9 +43,11 @@ show-nodes:
 
 deploy-app:
 	$(call ig_admin,application add ./Spotificeapp-py.xml)
+	- icepatch2calc distrib
 
 deploy-app-update:
 	$(call ig_admin,application update ./Spotificeapp-py.xml)
+	- icepatch2calc distrib
 
 start-servers:
 	@for server in $(SERVERS); do \
