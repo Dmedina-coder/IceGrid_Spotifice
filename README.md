@@ -57,6 +57,7 @@ make start-local-nodes
 En la maquina distribuida
 
 ```bash
+make update-configs SUBNET="red en la que se encuentra el registry (ej: 10.0.2.0/24)"
 make start-remote-nodes
 ```
 
