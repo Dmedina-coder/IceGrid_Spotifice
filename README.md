@@ -41,36 +41,27 @@ Developed by the *Distributed Systems* course teachers at **UCLM-ESI**.
 
 ## Ejecución
 
-### 1. Iniciar Registry
+### 1. Iniciar registry y nodo 1
+
+En la maquina 1: 
 
 ```bash
-make start-registry
+make start-grid
 ```
 
-### 2. Crear nodos locales y remotos
+### 2. Arrancar nodo 2
 
-En la maquina local
-
-```bash
-make start-local-nodes
 ```
-En la maquina distribuida
+En la maquina 2:
 
 ```bash
-make update-configs SUBNET="red en la que se encuentra el registry (ej: 10.0.2.0/24)"
-make start-remote-nodes
+make node-2
 ```
 
 ### 3. Desplegar la aplicación
-
+En la maquina 1:
 ```bash
 make deploy-app
-```
-
-### 4. Arrancamos los servidores locales y remotos
-
-```bash
-make start-servers
 ```
 
 ### 5. Ejecutar el control de medios
@@ -81,7 +72,7 @@ En el directorio del proyecto:
 make client
 ```
 
-### 6. La gestion de los nodos la podemos gestionar desde
+### 6.Gestión y monitorización: 
 
 ```bash
 icegridgui

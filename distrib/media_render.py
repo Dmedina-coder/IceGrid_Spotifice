@@ -240,7 +240,6 @@ def main(ic, player):
 
     logger.info("Shutdown")
 
-
 if __name__ == "__main__":
     player = GstPlayer()
     player.start()
