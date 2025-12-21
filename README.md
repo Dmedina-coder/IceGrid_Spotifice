@@ -51,7 +51,6 @@ make start-grid
 
 ### 2. Arrancar nodo 2
 
-```
 En la maquina 2:
 
 ```bash
@@ -60,6 +59,7 @@ make node-2
 
 ### 3. Desplegar la aplicación
 En la maquina 1:
+
 ```bash
 make deploy-app
 ```
@@ -72,7 +72,7 @@ En el directorio del proyecto:
 make client
 ```
 
-### 6.Gestión y monitorización: 
+### 6. Gestión y monitorización: 
 
 ```bash
 icegridgui
